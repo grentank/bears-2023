@@ -1,14 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
-import type { PostType } from '../../types/postTypes';
-import { PostContext } from '../../contexts/postContext';
-
-type PostFormProps = {
-  // addPostHandler: (e: React.FormEvent<HTMLFormElement>, input: PostType['title']) => Promise<void>;
-};
+import useHandlersContext from '../../contexts/handlers/hooks';
 
 export default function PostForm(): JSX.Element {
-  const {addPostHandler} = useContext(PostContext)!;
+  const { addPostHandler } = useHandlersContext();
   const [input, setInput] = useState<string>('');
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => setInput(e.target.value);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {

@@ -1,15 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Button, Card, CardText, CardTitle } from 'reactstrap';
 import type { PostType } from '../../types/postTypes';
-import { PostContext } from '../../contexts/postContext';
+import useHandlersContext from '../../contexts/handlers/hooks';
 
 type PostCardProps = {
   post: PostType;
-  // deleteHandler: (postId: PostType['id']) => Promise<void>;
 };
 
 function PostCard({ post }: PostCardProps): JSX.Element {
-  const { deleteHandler } = useContext(PostContext)!;
+  const { deleteHandler } = useHandlersContext();
   console.log('card render');
   return (
     <Card

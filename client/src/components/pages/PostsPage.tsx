@@ -5,7 +5,7 @@ import PostForm from '../ui/PostForm';
 import type { PostType } from '../../types/postTypes';
 import PostsList from '../ui/PostsList';
 import hashPosts from '../../utils/hashPosts';
-import PostContextProvider from '../../contexts/postContext';
+import PostContextProvider from '../../contexts/post/postContextProvider';
 
 export default function PostsPage(): JSX.Element {
   return (

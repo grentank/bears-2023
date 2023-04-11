@@ -1,9 +1,8 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import type { PostTypeContextValue } from '../types/callbackTypes';
-import type { PostType } from '../types/postTypes';
-
-export const PostContext = createContext<PostTypeContextValue | null>(null);
+import type { PostType } from '../../types/postTypes';
+import PostContext from './postContext';
+import HandlersContext from '../handlers/handlersContext';
 
 type PostContextProviderProps = {
   children: JSX.Element;
@@ -13,7 +12,7 @@ export default function PostContextProvider({ children }: PostContextProviderPro
   const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
-    axios<PostType[]>('http://localhost:3001/api/posts')
+    axios<PostType[]>('/posts')
       .then(({ data }) => setPosts(data))
       .catch(console.log);
   }, []);
@@ -24,7 +23,7 @@ export default function PostContextProvider({ children }: PostContextProviderPro
   ): Promise<void> => {
     e.preventDefault();
     // const data = Object.fromEntries(new FormData(e.currentTarget));
-    const response = await axios.post<PostType>('http://localhost:3001/api/posts', {
+    const response = await axios.post<PostType>('/posts', {
       title: input,
     });
     if (response.status === 200) {
@@ -33,7 +32,7 @@ export default function PostContextProvider({ children }: PostContextProviderPro
   };
 
   const deleteHandler = useCallback(async (postId: PostType['id']): Promise<void> => {
-    const response = await axios.delete(`http://localhost:3001/api/posts/${postId}`);
+    const response = await axios.delete(`/posts/${postId}`);
     if (response.status === 200) {
       setPosts((prev) => prev.filter((post) => post.id !== postId));
     }
@@ -41,15 +40,21 @@ export default function PostContextProvider({ children }: PostContextProviderPro
 
   // const hash = useMemo(() => hashPosts(posts), []);
 
+  // useCallback(fn) <=> useMemo(() => fn)
+
+  const handlersValue = useMemo(
+    () => ({
+      deleteHandler,
+      addPostHandler,
+    }),
+    [],
+  );
+
   return (
-    <PostContext.Provider
-      value={{
-        deleteHandler,
-        addPostHandler,
-        posts,
-      }}
-    >
-      {children}
-    </PostContext.Provider>
+    <HandlersContext.Provider value={handlersValue}>
+      {/*
+       eslint-disable-next-line react/jsx-no-constructed-context-values */}
+      <PostContext.Provider value={{ posts }}>{children}</PostContext.Provider>
+    </HandlersContext.Provider>
   );
 }

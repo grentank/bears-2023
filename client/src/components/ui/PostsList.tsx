@@ -1,16 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Col, Row } from 'reactstrap';
-import type { PostType } from '../../types/postTypes';
 import PostCard from './PostCard';
-import { PostContext } from '../../contexts/postContext';
-
-type PostsListProps = {
-  //   posts: PostType[];
-  //   deleteHandler: (postId: PostType['id']) => Promise<void>;
-};
+import usePostContext from '../../contexts/post/hooks';
 
 export default function PostsList(): JSX.Element {
-  const { posts } = useContext(PostContext)!;
+  const { posts } = usePostContext();
   return (
     <Row>
       {posts.map((post) => (

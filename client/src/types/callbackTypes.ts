@@ -7,8 +7,7 @@ export type AddPostHandlerType = (
   input: PostType['title'],
 ) => Promise<void>;
 
-export type PostTypeContextValue = {
+export type CallbackTypeContextValue = {
   deleteHandler: DeleteHandlerType;
   addPostHandler: AddPostHandlerType;
-  posts: PostType[];
 };
