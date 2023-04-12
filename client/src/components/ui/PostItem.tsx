@@ -13,12 +13,16 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import type { PostType } from '../../types/post/postTypes';
+import { useAppDispatch } from '../../features/redux/hooks';
+import { deletePost } from '../../features/redux/slices/posts/postsSlice';
+import { deletePostThunk } from '../../features/redux/slices/posts/thunkActions';
 
 type PostItemProps = {
   post: PostType;
 };
 
 function PostItem({ post }: PostItemProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
@@ -32,7 +36,7 @@ function PostItem({ post }: PostItemProps): JSX.Element {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {post.title.slice(0, 1)}
+            {post.User.name.slice(0, 1)}
           </Avatar>
         }
         action={
@@ -55,13 +59,18 @@ function PostItem({ post }: PostItemProps): JSX.Element {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  dispatch(deletePostThunk(post.id));
+                }}
+              >
+                Delete
+              </MenuItem>
             </Menu>
           </>
         }
-        title={post.userId}
+        title={post.User.name}
         subheader={post.createdAt.toLocaleString()}
       />
       <CardContent>

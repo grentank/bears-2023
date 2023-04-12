@@ -12,16 +12,17 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import type { SignUpForm } from '../../types/user/formTypes';
+import { useAppDispatch } from '../../features/redux/hooks';
+import { signUpThunk } from '../../features/redux/slices/user/thunkActions';
 
 export default function SignUpPage(): JSX.Element {
+  const dispatch = useAppDispatch();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const data = Object.fromEntries(new FormData(event.currentTarget)) as SignUpForm;
+
+    dispatch(signUpThunk(data));
   };
 
   return (

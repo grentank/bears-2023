@@ -6,7 +6,7 @@ const postRouter = express.Router();
 postRouter
   .route('/')
   .post(async (req, res) => {
-    const newPost = await Post.create({ ...req.body, userId: req.session.id });
+    const newPost = await Post.create({ ...req.body, userId: req.session.user.id });
     const newPostWithUser = await Post.findOne({ where: { id: newPost.id }, include: User });
     res.json(newPostWithUser);
   })
@@ -20,7 +20,7 @@ postRouter
 
 postRouter.route('/:id').delete(async (req, res) => {
   await Post.destroy({ where: { id: req.params.id } });
-  res.json(200);
+  res.sendStatus(200);
 });
 
 module.exports = postRouter;

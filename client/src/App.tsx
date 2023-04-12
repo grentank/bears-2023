@@ -1,5 +1,5 @@
 import { Container } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './components/HOC/PrivateRoute';
 import CounterPage from './components/pages/CounterPage';
@@ -11,9 +11,20 @@ import SearchPage from './components/pages/SearchPage';
 import NavigationBar from './components/ui/NavigationBar';
 import Loader from './components/HOC/Loader';
 import SignUpPage from './components/pages/SignUpPage';
+import { useAppDispatch, useAppSelector } from './features/redux/hooks';
+import { checkUserThunk } from './features/redux/slices/user/thunkActions';
+import { loadPostsThunk } from './features/redux/slices/posts/thunkActions';
 
 function App(): JSX.Element {
-  const user = { status: 'empty' };
+  const user = useAppSelector((store) => store.user);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(checkUserThunk());
+    dispatch(loadPostsThunk());
+  }, []);
+
   return (
     <Container>
       <Loader>
@@ -22,12 +33,12 @@ function App(): JSX.Element {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/counter" element={<CounterPage />} />
-            <Route element={<PrivateRoute isAllowed={user.status === 'empty'} />}>
+            <Route element={<PrivateRoute isAllowed={user.status === 'guest'} />}>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
             </Route>
             <Route
-              element={<PrivateRoute isAllowed={user.status === 'empty'} redirectPath="/login" />}
+              element={<PrivateRoute isAllowed={user.status === 'logged'} redirectPath="/login" />}
             >
               <Route path="/posts" element={<PostsPage />} />
               <Route path="/search" element={<SearchPage />} />

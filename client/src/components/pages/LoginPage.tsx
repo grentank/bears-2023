@@ -12,15 +12,17 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as RouterLink } from 'react-router-dom';
+import type { LoginForm } from '../../types/user/formTypes';
+import { useAppDispatch } from '../../features/redux/hooks';
+import { loginUserThunk } from '../../features/redux/slices/user/thunkActions';
 
 export default function LoginPage(): JSX.Element {
+  const dispatch = useAppDispatch();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const data = Object.fromEntries(new FormData(event.currentTarget)) as LoginForm;
+
+    dispatch(loginUserThunk(data));
   };
 
   return (
@@ -60,10 +62,6 @@ export default function LoginPage(): JSX.Element {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In

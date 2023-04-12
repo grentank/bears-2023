@@ -9,28 +9,24 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useCallback, useState } from 'react';
+import { useAppDispatch } from '../../features/redux/hooks';
+import { addPost } from '../../features/redux/slices/posts/postsSlice';
+import { submitPostThunk } from '../../features/redux/slices/posts/thunkActions';
+import type { PostForm } from '../../types/post/postTypes';
 
 export default function AddPostForm(): JSX.Element {
-  const [input, setInput] = useState('');
-  const changeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>): void => setInput(e.target.value),
-    [],
-  );
+  const dispatch = useAppDispatch();
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const formData = Object.fromEntries(new FormData(e.currentTarget)) as PostForm;
+    dispatch(submitPostThunk(formData));
+  };
+
   return (
     <Grid container direction="column" justifyContent="center" alignItems="center">
       <Grid item xs={6}>
-        {/* <FormControl fullWidth sx={{ m: 1 }}>
-          <InputLabel htmlFor="outlined-adornment-amount">Search</InputLabel>
-          <OutlinedInput
-            value={input}
-            onChange={changeHandler}
-            id="outlined-adornment-amount"
-            startAdornment={<InputAdornment position="start">Пост:</InputAdornment>}
-            label="Search"
-          />
-          <Button type="button">+1</Button>
-        </FormControl> */}
-        <Box component="form" noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={submitHandler} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
