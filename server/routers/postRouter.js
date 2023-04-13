@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require('sequelize');
 const { Post, User } = require('../db/models');
 
 const postRouter = express.Router();
@@ -21,6 +22,13 @@ postRouter
 postRouter.route('/:id').delete(async (req, res) => {
   await Post.destroy({ where: { id: req.params.id } });
   res.sendStatus(200);
+});
+
+postRouter.get('/search/:str', async (req, res) => {
+  const words = await Post.findAll({
+    where: { body: { [Op.like]: `%${req.params.str}%` } },
+  });
+  res.json(words);
 });
 
 module.exports = postRouter;

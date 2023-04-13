@@ -12,6 +12,7 @@ export type PostType = {
 export type PostsSliceType = {
   allPosts: PostType[];
   favorites: PostType[];
+  search: PostType[];
 };
 
 export type PostForm = {

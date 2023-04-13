@@ -10,7 +10,11 @@ export type GuestType = {
   status: 'guest';
 };
 
-export type UserType = GuestType | FetchingUserType | LoggedType;
+export type IdleType = {
+  status: 'idle';
+};
+
+export type UserType = GuestType | FetchingUserType | LoggedType | IdleType;
 
 export type UserFromBackend = {
   id: number;

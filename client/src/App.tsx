@@ -12,8 +12,9 @@ import NavigationBar from './components/ui/NavigationBar';
 import Loader from './components/HOC/Loader';
 import SignUpPage from './components/pages/SignUpPage';
 import { useAppDispatch, useAppSelector } from './features/redux/hooks';
-import { checkUserThunk } from './features/redux/slices/user/thunkActions';
+// import { checkUserThunk } from './features/redux/slices/user/thunkActions';
 import { loadPostsThunk } from './features/redux/slices/posts/thunkActions';
+import { fetchUserFromSession } from './features/redux/slices/user/userSlice';
 
 function App(): JSX.Element {
   const user = useAppSelector((store) => store.user);
@@ -21,7 +22,7 @@ function App(): JSX.Element {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(checkUserThunk());
+    void dispatch(fetchUserFromSession());
     dispatch(loadPostsThunk());
   }, []);
 

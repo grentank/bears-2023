@@ -6,6 +6,7 @@ import type { PostType, PostsSliceType } from '../../../../types/post/postTypes'
 const initialState: PostsSliceType = {
   allPosts: [],
   favorites: [],
+  search: [],
 };
 
 export const postsSlice = createSlice({
@@ -26,9 +27,12 @@ export const postsSlice = createSlice({
       const foundIndex = state.allPosts.findIndex((post) => post.id === action.payload.id);
       state.allPosts[foundIndex] = action.payload;
     },
+    setSearchedPosts: (state, action: PayloadAction<PostType[]>) => {
+      state.search = action.payload;
+    },
   },
 });
 
-export const { addPost, deletePost, modifyPost, setPosts } = postsSlice.actions;
+export const { addPost, deletePost, modifyPost, setPosts, setSearchedPosts } = postsSlice.actions;
 
 export default postsSlice.reducer;

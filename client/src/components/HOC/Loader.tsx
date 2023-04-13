@@ -8,7 +8,8 @@ type LoaderProps = {
 
 export default function Loader({ children }: LoaderProps): JSX.Element {
   const user = useAppSelector((store) => store.user);
-  if (user.status !== 'fetching') return children;
+  if (user.status === 'idle') return <h1>LOADING...</h1>;
+  if (user.status === 'fetching') return <CircularProgress />;
 
-  return <CircularProgress />;
+  return children;
 }

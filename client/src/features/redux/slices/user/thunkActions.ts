@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { LoginForm, SignUpForm } from '../../../../types/user/formTypes';
 import type { ThunkActionCreater } from '../../store';
 import type { UserFromBackend } from '../../../../types/user/userTypes';
@@ -16,11 +17,11 @@ export const signUpThunk: ThunkActionCreater<SignUpForm> = (formData) => (dispat
 };
 
 export const loginUserThunk: ThunkActionCreater<LoginForm> = (formData) => (dispatch) => {
-    axios
-      .post<UserFromBackend>('/auth/login', formData)
-      .then(({ data }) => dispatch(setUser({ ...data, status: 'logged' })))
-      .catch(console.log);
-  };
+  axios
+    .post<UserFromBackend>('/auth/login', formData)
+    .then(({ data }) => dispatch(setUser({ ...data, status: 'logged' })))
+    .catch(console.log);
+};
 
 export const checkUserThunk: ThunkActionCreater = () => (dispatch) => {
   axios
